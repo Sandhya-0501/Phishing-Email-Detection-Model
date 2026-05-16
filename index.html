@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing Detector</title>
+</head>
+<body style="font-family: Arial; text-align:center; margin-top:50px;">
+
+    <h2>Phishing Email Detection</h2>
+
+    <textarea id="emailText" rows="6" cols="50" placeholder="Paste email here..."></textarea>
+    <br><br>
+
+    <button onclick="checkEmail()">Check</button>
+
+    <h3 id="result"></h3>
+
+<script>
+function checkEmail() {
+    const text = document.getElementById("emailText").value;
+
+    fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("result").innerHTML =
+            "Prediction: " + data.prediction +
+            " | Accuracy: " + data.accuracy + "%";
+    })
+    .catch(err => {
+        document.getElementById("result").innerHTML =
+            "Error connecting to model";
+    });
+}
+</script>
+
+</body>
+</html>
